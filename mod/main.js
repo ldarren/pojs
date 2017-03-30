@@ -1,11 +1,12 @@
-amd.run({
-    name: 'main',
-    onLoad: window.onload,
-    paths:{
-        '*': 'mod/',
-        root: './',
-        lib: 'lib/'
-    }
+pico.run({
+	name: 'main',
+	ajax:__.ajax,
+	onLoad: __.onload,
+	paths:{
+			'~': 'mod/',
+			root: './',
+			lib: 'lib/'
+	}
 },function(){
 	var router=require('lib/router')
 	var Collection=require('lib/Collection')

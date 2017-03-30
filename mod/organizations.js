@@ -1,9 +1,10 @@
 var View=require('lib/View')
 var view
+var Collection=require('lib/Collection')
+var coll
 var router=require('lib/router')
 var html=require('organizations.html')
 var css=require('organizations.css')
-var coll=require('coll_organizations')
 var Header=require('Header')
 var List=require('List')
 var Row=require('Row')
@@ -19,6 +20,22 @@ var onListSelect=function(){
 
 this.load=function(){
 	view=new View
+	coll=new Collection
+	coll.load([{
+			id:1,
+			name:'AAA',
+			desc:'the tail of your dump file indicates that you have'
+		},{
+			id:2,
+			name:'BBB',
+			desc:'Try using forward slash'
+		},{
+			id:3,
+			name:'CCC',
+			desc:'When running this on a file that is'
+	}],function(err){
+		console.log('load orgs done',err)
+	})
 }
 
 return {
