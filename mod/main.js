@@ -34,7 +34,7 @@ pico.run({
 			}
 			oldPanes=panes
 			for(var i=0,p; p=panes[i]; i++){
-				if (p) p.start(document.getElementById('pane'+i),params)
+				if (p) p.start({el:'#pane'+i},params)
 			}
 		})
 	}

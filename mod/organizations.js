@@ -39,12 +39,14 @@ this.load=function(){
 }
 
 return {
-	start:function(el,params){
-		view.start(el,params,'organizations',html,css)
+	start:function(opt,params){
+		opt.css=css
+		opt.childs=html
+		view.start(opt)
 
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)
-		header.start(el.getElementsByTagName('header')[0],{
+		header.start({el:view.el.getElementsByTagName('header')[0]},{
 			leftText:'',
 			rightText:'next',
 			title:'Organizations',
@@ -53,7 +55,7 @@ return {
 
 		var list=this.list=new List
 		list.callback.on('select',onListSelect,this)
-		list.start(el.getElementsByTagName('content')[0],{
+		list.start({el:view.el.getElementsByTagName('content')[0]},{
 			collection:coll,
 			Row:Row
 		})
@@ -63,6 +65,6 @@ return {
 		this.header.stop()
 		this.header=this.list=undefined
 
-		view.stop('organizations')
+		view.stop()
 	}
 }

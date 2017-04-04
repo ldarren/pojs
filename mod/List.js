@@ -1,4 +1,5 @@
 inherit('lib/View')
+var html=require('List.html')
 var css=require('List.css')
 var List=function(coll,Row){
 	List.__super__.constructor.call(this)
@@ -11,25 +12,26 @@ var render=function(container,models,Row){
 	var ids=Object.keys(models)
 	for(var i=0,k,m,r,el; k=ids[i]; i++){
 		m=models[k]
-		el=document.createElement('div')
-		container.appendChild(el)
 		r=new Row
-		r.start(el,m)
+		r.start({},m)
+		container.appendChild(r.render())
 		output.push(r)
 	}
 	return output
 }
 
 List.prototype={
-	start:function(el,params){
-		List.__super__.start.call(this,el,params,'list','<ul></ul>',css)
+	start:function(opt,params){
+		opt.css=css
+		opt.childs=html
+		List.__super__.start.call(this,opt)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
 
 		this.coll.callback.on('update',function(){console.log('Coll.update',arguments)},this)
 		this.coll.models[1].callback.on('field.update',function(){console.log('Model.update',arguments)},this)
 
-		this.rows=render(el.getElementsByTagName('ul')[0],this.coll.models,this.Row)
+		this.rows=render(this.el.getElementsByTagName('ul')[0],this.coll.models,this.Row)
 	},
 	stop:function(){
 		this.coll.models[1].callback.off(null,null,this)
@@ -38,7 +40,7 @@ List.prototype={
 			r.stop()
 		}
 		this.rows.length=0
-		List.__super__.stop.call(this,'list')
+		List.__super__.stop.call(this)
 	}
 }
 

@@ -17,12 +17,14 @@ this.load=function(){
 }
 
 return {
-	start:function(el,params){
-		view.start(el,params,'users',html,css)
+	start:function(opt,params){
+		opt.css=css
+		opt.childs=html
+		view.start(opt)
 
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)
-		header.start(el.getElementsByTagName('header')[0],{
+		header.start({el:el.getElementsByTagName('header')[0]},{
 			leftText:'back',
 			rightText:'',
 			title:'Users',
@@ -33,6 +35,6 @@ return {
 		this.header.stop()
 		this.header=undefined
 
-		view.stop('users')
+		view.stop()
 	}
 }

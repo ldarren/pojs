@@ -1,5 +1,5 @@
 inherit('lib/View')
-var html=require('Row.html')
+var tmpl=require('Row.asp')
 var css=require('Row.css')
 var Row=function(model){
 	Row.__super__.constructor.call(this)
@@ -7,13 +7,15 @@ var Row=function(model){
 }
 
 Row.prototype={
-	start:function(el,params){
-		Row.__super__.start.call(this,el,params,'row',html,css)
+	start:function(opt,params){
+		opt.css=css
+		opt.childs=this.compile(tmpl,params)
+		Row.__super__.start.call(this,opt)
 		this.model=params.model||this.model
 		params.desc=params.desc+Date.now()
 	},
 	stop:function(){
-		Row.__super__.stop.call(this,'row')
+		Row.__super__.stop.call(this)
 	}
 }
 
