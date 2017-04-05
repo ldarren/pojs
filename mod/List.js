@@ -24,7 +24,7 @@ List.prototype={
 	start:function(opt,params){
 		opt.css=css
 		opt.childs=html
-		List.__super__.start.call(this,opt)
+		this.create(opt)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
 
@@ -40,7 +40,7 @@ List.prototype={
 			r.stop()
 		}
 		this.rows.length=0
-		List.__super__.stop.call(this)
+		this.remove()
 	}
 }
 

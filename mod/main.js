@@ -1,7 +1,11 @@
+var pStr=pico.export('pico/str')
 pico.run({
 	name: 'main',
 	ajax:__.ajax,
 	onLoad: __.onload,
+	preprocessors:{
+		'.asp':function(url,asp){ return pStr.template(asp) }
+	},
 	paths:{
 			'~': 'mod/',
 			root: './',

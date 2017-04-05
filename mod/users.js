@@ -24,7 +24,7 @@ return {
 
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)
-		header.start({el:el.getElementsByTagName('header')[0]},{
+		header.start({el:view.el.getElementsByTagName('header')[0]},{
 			leftText:'back',
 			rightText:'',
 			title:'Users',
