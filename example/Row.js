@@ -1,4 +1,4 @@
-inherit('lib/View')
+inherit('po/View')
 var tmpl=require('Row.asp')
 var Row=function(model){
 	Row.__super__.constructor.call(this)

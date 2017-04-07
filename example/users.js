@@ -1,6 +1,6 @@
-var View=require('lib/View')
+var View=require('po/View')
 var view
-var router=require('lib/router')
+var router=require('po/router')
 var html=require('users.html')
 var css=require('users.css')
 var Header=require('Header')

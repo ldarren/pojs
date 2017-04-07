@@ -7,13 +7,12 @@ pico.run({
 		'.asp':function(url,asp){ return pStr.template(asp) }
 	},
 	paths:{
-			'~': 'mod/',
-			root: './',
-			lib: 'lib/'
+		'~': './',
+		po: '../lib/'
 	}
 },function(){
-	var router=require('lib/router')
-	var Collection=require('lib/Collection')
+	var router=require('po/router')
+	var Collection=require('po/Collection')
 	var pages={
 		organizations:{panes:['organizations']},
 		users:{panes:['users']}

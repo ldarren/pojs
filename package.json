@@ -1,13 +1,13 @@
 {
   "name": "pojs",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "plain old javascript",
-  "main": "mod/main.js",
+  "main": "example/main.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "node mod/main.js"
+    "test": "node example/main.js"
   },
   "repository": {
     "type": "git",

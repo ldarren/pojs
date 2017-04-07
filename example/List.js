@@ -1,4 +1,4 @@
-inherit('lib/View')
+inherit('po/View')
 var html=require('List.html')
 var css=require('List.css')
 var List=function(coll,Row){

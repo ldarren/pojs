@@ -1,8 +1,8 @@
-var View=require('lib/View')
+var View=require('po/View')
 var view
-var Collection=require('lib/Collection')
+var Collection=require('po/Collection')
 var coll
-var router=require('lib/router')
+var router=require('po/router')
 var html=require('organizations.html')
 var css=require('organizations.css')
 var Header=require('Header')
