@@ -11,7 +11,7 @@ var Row=require('Row')
 var onHeaderClick=function(name){
 	switch(name){
 	case 'next':
-		router.go({page:'users'})
+		router.go('users/u156')
 		break
 	}
 }

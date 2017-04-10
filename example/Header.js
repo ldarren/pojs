@@ -1,6 +1,5 @@
 inherit('po/View')
 
-var router=require('po/router')
 var tmpl=require('Header.asp')
 var css=require('Header.css')
 

@@ -27,8 +27,8 @@ pico.run({
 			requireAll(reqs,idx,output,cb)
 		})
 	}
-	var pageChanged=function(params){
-		var page=params?pages[params.page]||home:home
+	var pageChanged=function(state, params){
+		var page=pages[state]||home
 		requireAll(page.panes,0,[],function(err, panes){
 			if (err) return console.error(err)
 			for(var i=0,p; p=oldPanes[i]; i++){
@@ -44,6 +44,6 @@ pico.run({
 
 	return function(){
 		router.on('change',pageChanged)
-		router.start()
+		router.start({organizations:'organizations','users/u:id':'users'},'/sandbox/pojs/example/')
 	}
 })
