@@ -1,6 +1,7 @@
 var View=require('po/View')
 var view
 var Collection=require('po/Collection')
+var CollOrganizations=require('CollOrganizations')
 var coll
 var router=require('po/router')
 var html=require('organizations.html')
@@ -20,22 +21,8 @@ var onListSelect=function(){
 
 this.load=function(){
 	view=new View
-	coll=new Collection
-	coll.load([{
-			id:1,
-			name:'AAA',
-			desc:'the tail of your dump file indicates that you have'
-		},{
-			id:2,
-			name:'BBB',
-			desc:'Try using forward slash'
-		},{
-			id:3,
-			name:'CCC',
-			desc:'When running this on a file that is'
-	}],function(err){
-		console.log('load orgs done',err)
-	})
+	// should use inherit in CollOrganizations, this is to test extend only
+	coll=new (Collection.extend(CollOrganizations))
 }
 
 return {

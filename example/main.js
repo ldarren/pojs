@@ -12,7 +12,6 @@ pico.run({
 	}
 },function(){
 	var router=require('po/router')
-	var Collection=require('po/Collection')
 	var pages={
 		organizations:{panes:['organizations']},
 		users:{panes:['users']}
@@ -43,7 +42,6 @@ pico.run({
 	}
 
 	return function(){
-		router.on('change',pageChanged)
-		router.start({organizations:'organizations','users/u:id':'users'},'/sandbox/pojs/example/')
+		router.on('change',pageChanged).start({organizations:'organizations','users/u:id':'users'},'/sandbox/pojs/example/')
 	}
 })

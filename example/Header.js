@@ -1,5 +1,4 @@
-inherit('po/View')
-
+var View=inherit('po/View')
 var tmpl=require('Header.asp')
 var css=require('Header.css')
 
@@ -7,7 +6,7 @@ return {
 	start:function(opt,params){
 		opt.css=css
 		opt.childs=tmpl(params)
-		this.create(opt)
+		View.prototype.start.call(this,opt)
 	},
 	events:{
 		'click button':function(e){

@@ -1,4 +1,4 @@
-inherit('po/View')
+var View=inherit('po/View')
 var html=require('List.html')
 var css=require('List.css')
 var List=function(coll,Row){
@@ -24,7 +24,7 @@ List.prototype={
 	start:function(opt,params){
 		opt.css=css
 		opt.childs=html
-		this.create(opt)
+		View.prototype.start.call(this,opt)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
 
@@ -40,7 +40,7 @@ List.prototype={
 			r.stop()
 		}
 		this.rows.length=0
-		this.remove()
+		View.prototype.stop.call(this)
 	}
 }
 
