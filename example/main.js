@@ -26,7 +26,7 @@ pico.run({
 			requireAll(reqs,idx,output,cb)
 		})
 	}
-	var pageChanged=function(state, params){
+	var pageChanged=function(evt, state, params){
 		var page=pages[state]||home
 		requireAll(page.panes,0,[],function(err, panes){
 			if (err) return console.error(err)

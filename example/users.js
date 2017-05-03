@@ -4,7 +4,7 @@ var router=require('po/router')
 var html=require('users.html')
 var css=require('users.css')
 var Header=require('Header')
-var onHeaderClick=function(name){
+var onHeaderClick=function(evt,name){
 	switch(name){
 	case 'back':
 		router.back()

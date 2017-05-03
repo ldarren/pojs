@@ -9,14 +9,14 @@ var css=require('organizations.css')
 var Header=require('Header')
 var List=require('List')
 var Row=require('Row')
-var onHeaderClick=function(name){
+var onHeaderClick=function(evt,name){
 	switch(name){
 	case 'next':
 		router.go('users/u156')
 		break
 	}
 }
-var onListSelect=function(){
+var onListSelect=function(evt){
 }
 
 this.load=function(){
