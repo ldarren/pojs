@@ -10,7 +10,7 @@ var List=function(coll,Row){
 var render=function(container,models,Row){
 	var output=[]
 	var ids=Object.keys(models)
-	for(var i=0,k,m,r,el; k=ids[i]; i++){
+	for(var i=0,k,m,r; k=ids[i]; i++){
 		m=models[k]
 		r=new Row
 		r.start({},m)
