@@ -7,14 +7,14 @@ var List=function(coll,Row){
 	this.Row=Row
 	this.rows=[]
 }
-var render=function(container,models,Row){
+var populate=function(container,models,Row){
 	var output=[]
 	var ids=Object.keys(models)
 	for(var i=0,k,m,r; k=ids[i]; i++){
 		m=models[k]
 		r=new Row
 		r.start({},m)
-		container.appendChild(r.render())
+		container.appendChild(r.el)
 		output.push(r)
 	}
 	return output
@@ -23,7 +23,7 @@ var render=function(container,models,Row){
 List.prototype={
 	start:function(opt,params){
 		opt.css=css
-		opt.childs=html
+		opt.content=html
 		View.prototype.start.call(this,opt)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
@@ -31,7 +31,7 @@ List.prototype={
 		this.coll.callback.on('update',function(){console.log('Coll.update',arguments)},this)
 		this.coll.models[1].callback.on('field.update',function(){console.log('Model.update',arguments)},this)
 
-		this.rows=render(this.el.getElementsByTagName('ul')[0],this.coll.models,this.Row)
+		this.rows=populate(this.el.getElementsByTagName('ul')[0],this.coll.models,this.Row)
 	},
 	stop:function(){
 		this.coll.models[1].callback.off(null,null,this)

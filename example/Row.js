@@ -7,7 +7,7 @@ var Row=function(model){
 
 Row.prototype={
 	start:function(opt,params){
-		opt.childs=tmpl(params)
+		opt.content=tmpl(params)
 		View.prototype.start.call(this,opt)
 		this.model=params.model||this.model
 		params.desc=params.desc+Date.now()

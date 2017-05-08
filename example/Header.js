@@ -5,7 +5,7 @@ var css=require('Header.css')
 return {
 	start:function(opt,params){
 		opt.css=css
-		opt.childs=tmpl(params)
+		opt.content=tmpl(params)
 		View.prototype.start.call(this,opt)
 	},
 	events:{

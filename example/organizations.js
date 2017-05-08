@@ -28,7 +28,7 @@ this.load=function(){
 return {
 	start:function(opt,params){
 		opt.css=css
-		opt.childs=html
+		opt.content=html
 		view.start(opt)
 
 		var header=this.header=new Header
