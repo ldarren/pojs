@@ -4,9 +4,8 @@ var css=require('Header.css')
 
 return {
 	start:function(opt,params){
-		opt.css=css
 		opt.content=tmpl(params)
-		View.prototype.start.call(this,opt)
+		View.prototype.start.call(this,opt,css)
 	},
 	events:{
 		'click button':function(e){

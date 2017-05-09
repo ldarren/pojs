@@ -18,9 +18,8 @@ this.load=function(){
 
 return {
 	start:function(opt,params){
-		opt.css=css
 		opt.content=html
-		view.start(opt)
+		view.start(opt,css)
 
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)

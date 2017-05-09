@@ -22,9 +22,8 @@ var populate=function(container,models,Row){
 
 List.prototype={
 	start:function(opt,params){
-		opt.css=css
 		opt.content=html
-		View.prototype.start.call(this,opt)
+		View.prototype.start.call(this,opt,css)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
 
