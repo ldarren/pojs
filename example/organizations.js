@@ -1,5 +1,5 @@
-var View=require('po/View')
-var view
+var Module=require('po/Module')
+var mod
 var Collection=require('po/Collection')
 var CollOrganizations=require('CollOrganizations')
 var coll
@@ -20,7 +20,7 @@ var onListSelect=function(evt){
 }
 
 this.load=function(){
-	view=new View
+	mod=new Module
 	// should use inherit in CollOrganizations, this is to test extend only
 	coll=new (Collection.extend(CollOrganizations))
 }
@@ -28,11 +28,11 @@ this.load=function(){
 return {
 	start:function(opt,params){
 		opt.content=html
-		view.start(opt,css)
+		mod.start(opt,css)
 
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)
-		header.start({el:view.el.getElementsByTagName('header')[0]},{
+		header.start({el:mod.el.getElementsByTagName('header')[0]},{
 			leftText:'',
 			rightText:'next',
 			title:'Organizations',
@@ -41,7 +41,7 @@ return {
 
 		var list=this.list=new List
 		list.callback.on('select',onListSelect,this)
-		list.start({el:view.el.getElementsByTagName('content')[0]},{
+		list.start({el:mod.el.getElementsByTagName('content')[0]},{
 			collection:coll,
 			Row:Row
 		})
@@ -51,6 +51,6 @@ return {
 		this.header.stop()
 		this.header=this.list=undefined
 
-		view.stop()
+		mod.stop()
 	}
 }

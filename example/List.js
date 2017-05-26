@@ -1,4 +1,4 @@
-var View=inherit('po/View')
+var Module=inherit('po/Module')
 var html=require('List.html')
 var css=require('List.css')
 var List=function(coll,Row){
@@ -23,7 +23,7 @@ var populate=function(container,models,Row){
 List.prototype={
 	start:function(opt,params){
 		opt.content=html
-		View.prototype.start.call(this,opt,css)
+		Module.prototype.start.call(this,opt,css)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
 
@@ -39,7 +39,7 @@ List.prototype={
 			r.stop()
 		}
 		this.rows.length=0
-		View.prototype.stop.call(this)
+		Module.prototype.stop.call(this)
 	}
 }
 

@@ -1,5 +1,5 @@
-var View=require('po/View')
-var view
+var Module=require('po/Module')
+var mod
 var router=require('po/router')
 var html=require('users.html')
 var css=require('users.css')
@@ -13,17 +13,17 @@ var onHeaderClick=function(evt,name){
 }
 
 this.load=function(){
-	view=new View
+	mod=new Module
 }
 
 return {
 	start:function(opt,params){
 		opt.content=html
-		view.start(opt,css)
+		mod.start(opt,css)
 
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)
-		header.start({el:view.el.getElementsByTagName('header')[0]},{
+		header.start({el:mod.el.getElementsByTagName('header')[0]},{
 			leftText:'back',
 			rightText:'',
 			title:'Users',
@@ -34,6 +34,6 @@ return {
 		this.header.stop()
 		this.header=undefined
 
-		view.stop()
+		mod.stop()
 	}
 }
