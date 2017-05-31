@@ -49,7 +49,7 @@ return {
 	stop:function(){
 		this.list.stop()
 		this.header.stop()
-		this.header=this.list=undefined
+		this.header=this.list=void 0
 
 		mod.stop()
 	}

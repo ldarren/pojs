@@ -32,7 +32,7 @@ return {
 	},
 	stop:function(){
 		this.header.stop()
-		this.header=undefined
+		this.header=void 0
 
 		mod.stop()
 	}
