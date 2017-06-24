@@ -1,10 +1,9 @@
-var pStr=pico.export('pico/str')
 pico.run({
 	name: 'main',
 	ajax:__.ajax,
 	onLoad: __.onload,
 	preprocessors:{
-		'.asp':function(url,asp){ return pStr.template(asp) }
+		'.asp':function(url,asp){ return pico.export('pico/str').template(asp) }
 	},
 	paths:{
 		'~': './',
@@ -18,7 +17,7 @@ pico.run({
 	}
 	var home=pages['organizations']
 	var oldPanes=[]
-	var requireAll=function(reqs,idx,output,cb){
+	function requireAll(reqs,idx,output,cb){
 		if (reqs.length<=idx) return cb(null,output)
 		require(reqs[idx++],function(err,mod){
 			if (err) return cb(err)
@@ -26,7 +25,7 @@ pico.run({
 			requireAll(reqs,idx,output,cb)
 		})
 	}
-	var pageChanged=function(evt, state, params){
+	function pageChanged(evt, state, params){
 		var page=pages[state]||home
 		requireAll(page.panes,0,[],function(err, panes){
 			if (err) return console.error(err)

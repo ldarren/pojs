@@ -9,6 +9,7 @@ Row.prototype={
 	start:function(opt,params){
 		opt.content=tmpl(params)
 		Module.prototype.start.call(this,opt)
+		// test coll and model events
 		this.model=params.model||this.model
 		params.desc=params.desc+Date.now()
 	}
