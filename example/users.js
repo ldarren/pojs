@@ -7,7 +7,8 @@ var Header=require('Header')
 var onHeaderClick=function(evt,name){
 	switch(name){
 	case 'back':
-		router.back()
+		//router.back() this caused nodes leak
+		router.go('organizations')
 		break
 	}
 }

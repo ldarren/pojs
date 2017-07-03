@@ -27,15 +27,14 @@ pico.run({
 	}
 	function pageChanged(evt, state, params){
 		var page=pages[state]||home
+		for(var i=0,p; p=oldPanes[i]; i++){
+			p.stop()
+		}
 		requireAll(page.panes,0,[],function(err, panes){
 			if (err) return console.error(err)
-			for(var i=0,p; p=oldPanes[i]; i++){
-				if (!p || p===panes[i]) continue
-				p.stop()
-			}
 			oldPanes=panes
 			for(var i=0,p; p=panes[i]; i++){
-				if (p) p.start({el:'#pane'+i},params)
+				p.start({el:'#pane'+i},params)
 			}
 		})
 	}
