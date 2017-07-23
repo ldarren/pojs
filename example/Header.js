@@ -8,8 +8,8 @@ return {
 		Module.prototype.start.call(this,opt,css)
 	},
 	events:{
-		'click button':function(e){
-			this.callback.trigger('click',e.target.textContent)
+		'click button':function(e, target){
+			this.callback.trigger('click',target.textContent)
 		}
 	}
 }

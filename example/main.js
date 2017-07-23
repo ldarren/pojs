@@ -40,6 +40,6 @@ pico.run({
 	}
 
 	return function(){
-		router.on('change',pageChanged).start({organizations:'organizations','users/u:id':'users'},'/sandbox/pojs/example/')
+		router.on('change',pageChanged).start({organizations:'organizations','users/u:id':'users'})
 	}
 })
