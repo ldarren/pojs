@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<link rel="shortcut icon" href=data:;base64,iVBORw0KGgo=>
+<script src=../node_modules/pico-common/bin/pico.js></script>
+<script src=../node_modules/lean-wrap/bin/lean.js></script>
+<script>
+pico.run({
+	name: 'main',
+	ajax:__.ajax,
+	onLoad: __.onload,
+	paths:{
+		'~': './'
+	}
+},function(){
+
+var Mod=require('Module')
+var mods
+var toggle=0
+var mod
+function onPathChange(){
+	if (mod) mod.stop()
+	mod=mods[toggle]
+	mod.start()
+	toggle=toggle?0:1
+}
+	return function(){
+mods=[new Mod(document.body,'<button>Button1</button>',onPathChange),new Mod(document.body,'<button>Button2</button>',onPathChange)]
+onPathChange()
+	}
+})
+</script>
+</head>
+<body>
+</body>
+</html>

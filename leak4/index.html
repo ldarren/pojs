@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<link rel="shortcut icon" href=data:;base64,iVBORw0KGgo=>
+<script src=../node_modules/pico-common/bin/pico.js></script>
+<script src=../node_modules/lean-wrap/bin/lean.js></script>
+<script>
+pico.run({
+	name: 'main',
+	ajax:__.ajax,
+	onLoad: __.onload,
+	paths:{
+		'~': './',
+		po: '../lib/'
+	}
+},function(){
+
+	var router=require('po/router')
+	var organizations=require('organizations')
+	var users=require('users')
+	var pages={
+		organizations:organizations,
+		users:users
+	}
+	var page
+	function pageChanged(evt, state, params){
+		if (page) page.stop()
+		page=pages[state]||pages['organizations']
+		page.start({el:document.body})
+		page.callback().on('click',pageChanged)
+	}
+
+	return function(){
+		router.on('change',pageChanged).start({organizations:'organizations','users/u:id':'users'})
+		//pageChanged()
+	}
+})
+</script>
+</head>
+<body>
+</body>
+</html>
