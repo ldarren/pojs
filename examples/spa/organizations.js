@@ -28,7 +28,7 @@ this.load=function(){
 return {
 	start:function(opt,params){
 		opt.content=html
-		opt.styles = {default:css}
+		opt.style = {organizations:css}
 		mod.start(opt)
 
 		var header=this.header=new Header

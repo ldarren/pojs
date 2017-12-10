@@ -23,7 +23,7 @@ var populate=function(container,models,Row){
 List.prototype={
 	start:function(opt,params){
 		opt.content=html
-		opt.styles={default:css}
+		opt.style={List:css}
 		Module.prototype.start.call(this,opt)
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row

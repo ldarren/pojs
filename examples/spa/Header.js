@@ -5,7 +5,7 @@ var css=require('Header.css')
 return {
 	start:function(opt,params){
 		opt.content=tmpl(params)
-		opt.styles = { default: css }
+		opt.style = { Header: css }
 		Module.prototype.start.call(this,opt)
 	},
 	events:{
