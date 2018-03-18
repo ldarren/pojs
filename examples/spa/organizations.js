@@ -31,6 +31,10 @@ return {
 		opt.style = {organizations:css}
 		mod.start(opt)
 
+		coll.forEach(function(ite, index, id, coll){
+			console.log(coll.name)
+		})
+
 		var header=this.header=new Header
 		header.callback.on('click',onHeaderClick,this)
 		header.start({el:mod.el.getElementsByTagName('header')[0]},{
