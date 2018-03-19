@@ -1,13 +1,13 @@
 {
   "name": "pojs",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "plain old javascript",
   "main": "example/main.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "node example/main.js"
+    "test": "echo \"needed browser for tests\" && exit 1"
   },
   "repository": {
     "type": "git",

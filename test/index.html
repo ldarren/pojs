@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=description content="POJS Unit Test">
+<meta name=viewport content=width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1>
+<meta name=app-version content=0.0.1>
+<meta name=app-support-native content=1>
+<link rel="shortcut icon" href=data:;base64,iVBORw0KGgo=>
+<title>POJS: unit test</title>
+</head>
+<body>
+<p>Test result is in console panel</p>
+
+<script src=../node_modules/pico-common/bin/pico-cli.js></script>
+<script src=../node_modules/lean-wrap/bin/lean.js></script>
+<script>
+pico.run({
+	name: 'TestUnit',
+	ajax:__.ajax,
+	onLoad: __.onload,
+	preprocessors:{
+		'.asp':function(url,asp){ return pico.export('pico/str').template(asp) }
+	},
+	paths:{
+		'~': './',
+		po: '../lib/'
+	}
+},function(){
+	const ensure = require('pico/test').ensure
+	const Collection = require('po/Collection')
+
+	return function(){
+		const planets = [
+			{name:'Mercury', days: 88, moons: 0, dist: 36, dia: 0.383, day: 400, night: -170},
+			{name:'Venus', days: 224, moons: 0, dist: 67.2, dia: 0.949, day: 460, night: 460},
+			{name:'Earth', days: 365, moons: 1, dist: 93, dia: 1, day: 20, night: 10},
+			{name:'Mars', days: 687, moons: 2, dist: 141.6, dia: 0.532, day: -5, night: -85},
+			{name:'Jupiter', days: 4332, moons: 63, dist: 483.6, dia: 11.21, day: -121, night: -121},
+			{name:'Saturn', days: 9617, moons: 61, dist: 886.7, dia: 9.45, day:-125, night: -125},
+			{name:'Uranus', days: 30685, moons: 27, dist: 1784, dia: 4.01, day: -193, night: -193},
+			{name:'Neptune', days: 60155, moons: 1, dist: 2794, dia: 3.88, day: -193, night: -153},
+		]
+		const coll = new Collection(planets, null, 'TestColl', null, { idAttr: 'name' })
+
+		console.log('# Collection')
+		ensure('ensure Collection has loaded correctly', function(cb){
+			cb(null, planets.length === coll.length())
+		})
+		ensure('ensure Collection.sort works', function(cb){
+			coll.sort((a, b) => {
+				return a.dist - b.dist
+			})
+			cb(null, planets[0].name === coll.at(0).name)
+		})
+		ensure('ensure Model.id is set based on idAttr', function(cb){
+			cb(null, planets[planets.length -1].name === coll.at(-1).id)
+		})
+		ensure('ensure Collection.forEach works', function(cb){
+			let count = 0
+			coll.forEach((model, index, id, models) => {
+				count++
+				if (model.name !== id || coll !== models || planets[index].dist !== model.dist) return cb(null, false)
+			})
+
+			cb(null, 8 === count)
+		})
+		ensure('ensure earth is the first liveable planet in solar system', function(cb){
+			cb(null, 'Earth' === coll.find(planet => (planet.day < 50 && planet.day > -50 && planet.night < 50 && planet.night > -50)).id)
+		})
+		ensure('ensure count of planets with less than 5 moons is 5', function(cb){
+			cb(null, 5 === coll.filter(planet => planet.moons < 5).length)
+		})
+	}
+})
+</script>
+</body>
+</html>
