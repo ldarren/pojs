@@ -32,7 +32,7 @@ pico.run({
 
 	return function(){
 		const planets = [
-			{name:'Mercury', days: 88, moons: 0, dist: 36, dia: 0.383, day: 400, night: -170},
+			{name:'Mercury', days: 88, moons: 0, dist: 36, dia: 0.383, day: 400, night: -170, remarks: '<p>UNSAFE</p>'},
 			{name:'Venus', days: 224, moons: 0, dist: 67.2, dia: 0.949, day: 460, night: 460},
 			{name:'Earth', days: 365, moons: 1, dist: 93, dia: 1, day: 20, night: 10},
 			{name:'Mars', days: 687, moons: 2, dist: 141.6, dia: 0.532, day: -5, night: -85},
@@ -70,6 +70,14 @@ pico.run({
 		})
 		ensure('ensure count of planets with less than 5 moons is 5', function(cb){
 			cb(null, 5 === coll.filter(planet => planet.moons < 5).length)
+		})
+		ensure('ensure collection initial data are escaped', function(cb){
+			cb(null, -1 === coll.get('Mercury').remarks.indexOf('<p>'))
+		})
+		ensure('ensure collection new data are escaped', function(cb){
+			const venus = coll.get('Venus')
+			venus.remarks = '<p>UNSAFE</p>'
+			cb(null, -1 === venus.remarks.indexOf('<p>'))
 		})
 	}
 })
