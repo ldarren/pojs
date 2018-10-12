@@ -1,7 +1,7 @@
 var Module=inherit('po/Module')
 var tmpl=require('Row.asp')
 var Row=function(model){
-	Row.__super__.constructor.call(this)
+	Row.prototype.constructor.call(this)
 	this.model=model
 }
 

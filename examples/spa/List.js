@@ -2,7 +2,7 @@ var Module=inherit('po/Module')
 var html=require('List.html')
 var css=require('List.css')
 var List=function(coll,Row){
-	List.__super__.constructor.call(this)
+	List.prototype.constructor.call(this)
 	this.coll=coll
 	this.Row=Row
 	this.rows=[]

@@ -1,6 +1,6 @@
 {
   "name": "pojs",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "plain old javascript",
   "main": "example/main.js",
   "directories": {
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/ldarren/pojs#readme",
   "devDependencies": {
-    "lean-wrap": "*",
-    "pico-common": "*"
+    "lean-wrap": "^0.2.26",
+    "pico-common": "^0.10.11"
   }
 }
