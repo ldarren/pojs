@@ -9,6 +9,52 @@ backbone@next implemented with plain old javascript with minimal dependencies
 
 Collections are ordered sets of models.
 
+#### override init function
+Collection constructor only process the first two arguments (`data`, `routes`), addtional arguments are processed by `Collection.init` function.
+
+the default init function
+```javascript
+init:function(name, network, opt){
+	this.name = name
+	this.network = network || this.network 
+	opt = opt || {}
+	this.idAttr = opt.idAttr || this.idAttr
+	return opt.reload
+}
+```
+return of `Collection.init` is a `Boolean`. if true, Collection will reload from local storage
+
+`Collection.init` can be override by `extend` function
+```javascript
+// in customcollection.js
+const Collection = require('po/collection')
+
+Collection.extend({
+	init:function(jwt){
+		this.name = 'CustomColl'
+		this.idAttr = '_key'
+		this.network = {
+			ajax: function(method,route,params,cb){
+				if (!route) return cb(null,params)
+				pico.ajax(method,route,params,{Authorization: 'Bearer' + jwt},function(err,state,res){
+					if (4!==state) return
+					if (err) return cb(err)
+					try{var obj=JSON.parse(res)}
+					catch(ex){return cb(ex)}
+					cb(null,obj)
+				})
+			}
+		}
+		return true
+	}
+})
+
+// in another.js
+const CustomCollection = require('customcollection')
+
+const coll = new Collection(null, {}, jwt); // name, network, opt arguments are no longer needed
+```
+
 #### override network function
 if the default ajax function doesn't meet your requirement, for example you need addtional headers. you can override it by passing in a new network object
 
