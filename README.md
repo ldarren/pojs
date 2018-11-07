@@ -16,7 +16,7 @@ Collections are ordered sets of models.
 > collection.add(models, cb)
 
 Add an array of raw object to the collection, firing an "add" event for each object added to collection as model
-```
+```javascript
 const coll = new Colection()
 coll.add([{id: 1, value: 'a'}, {id: 2, value: 'b'}])
 ```
