@@ -1,9 +1,6 @@
 # pojs
 backbone@next implemented with plain old javascript with minimal dependencies
 
-# test
-load `test/test.html` in browser, result is in console panel
-
 # documentation
 ## Collection
 
@@ -11,6 +8,35 @@ load `test/test.html` in browser, result is in console panel
 > new Collection([data], [routes], [name], [network], [options])
 
 Collections are ordered sets of models.
+
+#### override network function
+if the default ajax function doesn't meet your requirement, for example you need addtional headers. you can override it by passing in a new network object
+
+```javascript
+// pico is already defined
+
+function aclosure(jwt){
+  const options = {
+    headers: {
+      Authorization: 'Bearer ' + jwt
+    }
+  }
+  return {
+    ajax(method, route, params, cb){
+      if (!route) return cb(null,params)
+      pico.ajax(method,route,params,options,function(err,state,res){
+        if (4!==state) return
+        if (err) return cb(err)
+        try{var obj=JSON.parse(res)}
+        catch(ex){return cb(ex)}
+        cb(null,obj)
+      })
+    }
+  }
+}
+
+const coll = new Collection(null, {}, 'example', aclosure(jwt));
+```
 
 ### load 
 > collection.add(models, cb)
@@ -35,3 +61,6 @@ you can also specified array of need id as filter1, `list` will return an array 
 ```javascript
 collection.list(['dog', 'cat'], () => {})
 ```
+
+# test
+load `test/test.html` in browser, result is in console panel
