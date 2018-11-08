@@ -108,5 +108,29 @@ you can also specified array of need id as filter1, `list` will return an array 
 collection.list(['dog', 'cat'], () => {})
 ```
 
+## module
+### extend a module
+```javascript
+// CustomModule.js
+const Module = require('po/module');
+
+return Module.extend({
+	start(opt, param1){
+		Module.prototype.start.call(this, opt);
+		
+		// extra processing here
+	}
+});
+
+// othermodule.js
+const CustomModule = inherit('CustomModule')
+
+return {
+	start(opt, param1){
+		CustomModule.prototype.start.call(this, opt, param1);
+	}
+}
+```
+
 # test
 load `test/test.html` in browser, result is in console panel
