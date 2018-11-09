@@ -192,13 +192,13 @@ return {
 Example
 ```javascript
 // module1.js
+function onHello(data){
+	console.log(data) // 'abc'
+}
+function onWorld(data){
+	console.log(data) // 'def'
+}
 return {
-	function onHello(data){
-		console.log(data) // 'abc'
-	}
-	function onWorld(data){
-		console.log(data) // 'def'
-	}
 	start(opt, mod2){
 		mod2.callback.on('hello', onHello, this)
 		this.callback.on('world', onWorld, this)
@@ -208,13 +208,13 @@ return {
 }
 
 // module2.js
+function onFoo(data){
+	console.log(data) // 123
+}
+function onBar(data){
+	console.log(data) // 456
+}
 return {
-	function onFoo(data){
-		console.log(data) // 123
-	}
-	function onBar(data){
-		console.log(data) // 456
-	}
 	start(opt, mod1){
 		mod1.callback.on('bar', onBar, this)
 		this.callback.on('foo', onFoo, this)
