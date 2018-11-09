@@ -110,6 +110,12 @@ collection.list(['dog', 'cat'], () => {})
 
 ## module
 ### extend a module
+There are two ways to extend a module
+1) use the `extend` built in method
+2) use `inherit` keyword, it is synxtax sugar of `require` + `extend`
+`inherit` is more convenient but `.extend` is more flexible it allow you to extend multiple objects in a file
+
+Example:
 ```javascript
 // CustomModule.js
 const Module = require('po/module');
