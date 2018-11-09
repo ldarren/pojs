@@ -31,7 +31,7 @@ purpose of collection
 
 Collections are ordered sets of models.
 
-#### override init function
+#### extending collection
 Collection constructor only process the first two arguments (`data`, `routes`), addtional arguments are processed by `Collection.init` function.
 
 the default init function
@@ -44,9 +44,9 @@ init:function(name, network, opt){
 	return opt.reload
 }
 ```
-return of `Collection.init` is a `Boolean`. if true, Collection will reload from local storage
+return of `Collection.init` is a `Boolean`. if true, Collection will reload it content from local storage
 
-`Collection.init` can be override by `extend` function
+`Collection.init` can be overriden by `extend` function or `inherit` keyword
 ```javascript
 // in customcollection.js
 const Collection = require('po/collection')
@@ -74,7 +74,7 @@ Collection.extend({
 // in another.js
 const CustomCollection = require('customcollection')
 
-const coll = new Collection(null, {}, jwt); // name, network, opt arguments are no longer needed
+const coll = new CustomCollection(null, {}, jwt); // name, network, opt arguments are no longer needed
 ```
 
 #### override network function
@@ -86,6 +86,7 @@ if the default ajax function doesn't meet your requirement, for example you need
 function aclosure(jwt){
   const options = {
     headers: {
+      "Content-Type": 'application/json',
       Authorization: 'Bearer ' + jwt
     }
   }
@@ -126,8 +127,8 @@ function newModel(coll, id){
 return {
 	start(opt, coll){
 		coll.on('add', newModel, this)
-		coll.create({id: 1, value: 'a'}
-		coll.create({id: 2, value: 'b'}
+		coll.create({id: 1, value: 'a'})
+		coll.create({id: 2, value: 'b'})
 	}
 }
 ```
@@ -138,7 +139,7 @@ return {
 Add an array of raw object to the collection, firing an "add" event for each object added to collection as model
 ```javascript
 const coll = new Colection()
-coll.add([{id: 1, value: 'a'}, {id: 2, value: 'b'}])
+coll.create({id: 1, value: 'a'})
 ```
 
 ### list
@@ -157,7 +158,7 @@ collection.list(['dog', 'cat'], () => {})
 ```
 
 ## module
-### extend a module
+### extending a module
 There are two ways to extend a module
 1) use the `extend` built in method
 2) use `inherit` keyword, it is synxtax sugar of `require` + `extend`
