@@ -27,12 +27,32 @@ purpose of collection
 3) communication channel between modules
 
 ### initialiazation
-> new Collection([data], [routes], [name], [network], [options])
+> new Collection([seed], [routes], [name], [options])
 
 Collections are ordered sets of models.
 
+#### seed (array of object)
+inital data to populate collection
+
+#### routes 
+all routes supported absolute url and relative url. url in rest format is supported too, final url will be build on the fly when parameters are supplied
+
+- `create`: a `POST` url to create a model on upstream
+- `read`: a `GET` url to get a model from upstream
+- `update`: a `PUT` url to update a model on upstream
+- `delete`: a `DELETE` url to remove a model on upstream
+- `list`: a `GET` url to get an array of models from upstream
+
+#### name (string)
+prefix of localstorage key, if absent collection wont be saved to localstorage
+
+#### options (object)
+define `options.idAttr` to override the default `id` index key
+define `options.ajax` to override the default `ajax` network request function use by collection
+define `options.cache` to override the default localstorage cache function
+
 #### extending collection
-Collection constructor only process the first two arguments (`data`, `routes`), addtional arguments are processed by `Collection.init` function.
+Collection constructor only process the first two arguments (`seed`, `routes`), addtional arguments are processed by `Collection.init` function.
 
 the default init function
 ```javascript

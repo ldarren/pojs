@@ -41,7 +41,7 @@ pico.run({
 			{name:'Uranus', days: 30685, moons: 27, dist: 1784, dia: 4.01, day: -193, night: -193},
 			{name:'Neptune', days: 60155, moons: 1, dist: 2794, dia: 3.88, day: -193, night: -153},
 		]
-		const coll = new Collection(planets, null, 'TestColl', null, { idAttr: 'name' })
+		const coll = new Collection(planets, null, 'TestColl', { idAttr: 'name' })
 
 		console.log('# Collection')
 		test('ensure Collection has loaded correctly', function(cb){
@@ -91,6 +91,20 @@ pico.run({
 			coll.create({name:'Pluto', days: 90520, moons: 5, dist: 0, dia: 2.376, day: 0, night: 0}, (err, data) => {
 				if (err) return cb(err)
 				cb(null, data.name === 'Pluto')
+			})
+		})
+
+		const restColl = new Collection(null, {
+			create: 'https://httpbin.org/anything/:id',
+			read: 'https://httpbin.org/anything/:id',
+			update: 'https://httpbin.org/anything/:id',
+			delete: 'https://httpbin.org/anything/:id',
+			list: 'https://httpbin.org/anything/:id',
+		}, 'CollColl', { idAttr: 'url' })
+		test('ensure Collection.create works with rest url', function(cb){
+			restColl.create({id: 2574}, (err, data) => {
+				if (err) return cb(err)
+				cb(null, 'https://httpbin.org/anything/2574' === data.url)
 			})
 		})
 	}
