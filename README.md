@@ -56,15 +56,14 @@ Collection constructor only process the first two arguments (`seed`, `routes`), 
 
 the default init function
 ```javascript
-init:function(name, network, opt){
+init:function(name, opt){
 	this.name = name
-	this.network = network || this.network 
 	opt = opt || {}
+	this.ajax = opt.ajax || this.ajax
 	this.idAttr = opt.idAttr || this.idAttr
-	return opt.reload
 }
 ```
-return of `Collection.init` is a `Boolean`. if true, Collection will reload it content from local storage
+collection only cache the data if `name` is a valid string
 
 `Collection.init` can be overriden by `extend` function or `inherit` keyword
 ```javascript
@@ -75,17 +74,15 @@ Collection.extend({
 	init:function(jwt){
 		this.name = 'CustomColl'
 		this.idAttr = '_key'
-		this.network = {
-			ajax: function(method,route,params,cb){
-				if (!route) return cb(null,params)
-				pico.ajax(method,route,params,{Authorization: 'Bearer' + jwt},function(err,state,res){
-					if (4!==state) return
-					if (err) return cb(err)
-					try{var obj=JSON.parse(res)}
-					catch(ex){return cb(ex)}
-					cb(null,obj)
-				})
-			}
+		this.ajax = function(method,route,params,cb){
+			if (!route) return cb(null,params)
+			pico.ajax(method,route,params,{Authorization: 'Bearer' + jwt},function(err,state,res){
+				if (4!==state) return
+				if (err) return cb(err)
+				try{var obj=JSON.parse(res)}
+				catch(ex){return cb(ex)}
+				cb(null,obj)
+			})
 		}
 		return true
 	}
@@ -94,11 +91,11 @@ Collection.extend({
 // in another.js
 const CustomCollection = require('customcollection')
 
-const coll = new CustomCollection(null, {}, jwt); // name, network, opt arguments are no longer needed
+const coll = new CustomCollection(null, {}, jwt); // name, opt arguments are no longer needed in CustomerCollection
 ```
 
-#### override network function
-if the default ajax function doesn't meet your requirement, for example you need addtional headers. you can override it by passing in a new network object
+#### override ajax function
+if the default ajax function doesn't meet your requirement, for example you need addtional headers. you can override it by passing in a new ajax function 
 
 ```javascript
 // pico is already defined
@@ -106,7 +103,7 @@ if the default ajax function doesn't meet your requirement, for example you need
 function aclosure(jwt){
   const options = {
     headers: {
-      "Content-Type": 'application/json',
+      'Content-Type': 'application/json',
       Authorization: 'Bearer ' + jwt
     }
   }
