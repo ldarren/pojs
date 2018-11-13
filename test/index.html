@@ -29,6 +29,7 @@ pico.run({
 },function(){
 	const {test} = require('pico/test')
 	const Collection = require('po/Collection')
+	const Module = require('po/Module')
 
 	return function(){
 		const planets = [
@@ -41,7 +42,7 @@ pico.run({
 			{name:'Uranus', days: 30685, moons: 27, dist: 1784, dia: 4.01, day: -193, night: -193},
 			{name:'Neptune', days: 60155, moons: 1, dist: 2794, dia: 3.88, day: -193, night: -153},
 		]
-		const coll = new Collection(planets, null, 'TestColl', { idAttr: 'name' })
+		const coll = new Collection(planets, null, null, { idAttr: 'name' })
 
 		console.log('# Collection')
 		test('ensure Collection has loaded correctly', function(cb){
@@ -94,18 +95,57 @@ pico.run({
 			})
 		})
 
-		const restColl = new Collection(null, {
-			create: 'https://httpbin.org/anything/:id',
-			read: 'https://httpbin.org/anything/:id',
-			update: 'https://httpbin.org/anything/:id',
-			delete: 'https://httpbin.org/anything/:id',
-			list: 'https://httpbin.org/anything/:id',
-		}, 'CollColl', { idAttr: 'url' })
 		test('ensure Collection.create works with rest url', function(cb){
+			const restColl = new Collection(null, {
+				create: 'https://httpbin.org/anything/:id',
+				read: 'https://httpbin.org/anything/:id',
+				update: 'https://httpbin.org/anything/:id',
+				delete: 'https://httpbin.org/anything/:id',
+				list: 'https://httpbin.org/anything/:id',
+			}, null, { idAttr: 'url' })
 			restColl.create({id: 2574}, (err, data) => {
 				if (err) return cb(err)
 				cb(null, 'https://httpbin.org/anything/2574' === data.url)
 			})
+		})
+
+		test('ensure Module callack works both direction', function(cb){
+			const result = [1, 2, 3, 4]
+			function func(evt, val){
+				result.splice(result.indexOf(val), 1)
+				if (!result.length) cb(null, true)
+			}
+			
+			const Module1 = Module.extend({
+				start(opt, mod2){
+					this.peer = mod2
+					mod2.callback.on('hello', func, this)
+					this.callback.on('world', func, this)
+				},
+				go(){
+					this.peer.callback.trigger('foo', 1)
+					this.callback.trigger('bar', 2)
+				}
+			})
+
+			const Module2 = Module.extend({
+				start(opt, mod1){
+					this.peer = mod1
+					mod1.callback.on('bar', func, this)
+					this.callback.on('foo', func, this)
+				},
+				go(){
+					this.peer.callback.trigger('world', 3)
+					this.callback.trigger('hello', 4)
+				}
+			})
+
+			const m1 = new Module1
+			const m2 = new Module2
+			m1.start(null, m2)
+			m2.start(null, m1)
+			m1.go()
+			m2.go()
 		})
 	}
 })

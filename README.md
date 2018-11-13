@@ -218,10 +218,13 @@ function onWorld(data){
 }
 return {
 	start(opt, mod2){
+		this.peer = mod2
 		mod2.callback.on('hello', onHello, this)
 		this.callback.on('world', onWorld, this)
-		mod2.callback.trigger('foo', 123)
-		this.callback.trigger('bar', 123)
+	},
+	go(){
+		this.peer.callback.trigger('foo', 123)
+		this.callback.trigger('bar', 456)
 	}
 }
 
@@ -234,12 +237,23 @@ function onBar(data){
 }
 return {
 	start(opt, mod1){
+		this.peer = mod1
 		mod1.callback.on('bar', onBar, this)
 		this.callback.on('foo', onFoo, this)
-		mod1.callback.trigger('world', 123)
-		this.callback.trigger('hello', 456)
+	},
+	go(){
+		this.peer.callback.trigger('world', 'def')
+		this.callback.trigger('hello', 'abc')
 	}
 }
+
+// in parent of module1 and module2
+const m1 = new Module1
+const m2 = new Module2
+m1.start(null, m2)
+m2.start(null, m1)
+m1.go()
+m2.go()
 
 ```
 
