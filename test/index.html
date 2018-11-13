@@ -47,6 +47,14 @@ pico.run({
 		test('ensure Collection has loaded correctly', function(cb){
 			cb(null, planets.length === coll.length())
 		})
+		test('ensure Collection.list works', function(cb){
+			const name= planets[3].name
+			coll.list([name], (err, data) => {
+				if (err) return cb(err)
+				if (1 !== data.length) return cb('wrong response length')
+				cb(null, data[0].name === name)
+			})
+		})
 		test('ensure Collection.sort works', function(cb){
 			coll.sort((a, b) => {
 				return a.dist - b.dist
@@ -78,6 +86,12 @@ pico.run({
 			const venus = coll.get('Venus')
 			venus.remarks = '<p>UNSAFE</p>'
 			cb(null, -1 === venus.remarks.indexOf('<p>'))
+		})
+		test('ensure Collection.create works', function(cb){
+			coll.create({name:'Pluto', days: 90520, moons: 5, dist: 0, dia: 2.376, day: 0, night: 0}, (err, data) => {
+				if (err) return cb(err)
+				cb(null, data.name === 'Pluto')
+			})
 		})
 	}
 })
