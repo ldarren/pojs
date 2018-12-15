@@ -10,7 +10,7 @@ var List=function(coll,Row){
 var populate=function(container,models,Row){
 	var output=[]
 	var ids=Object.keys(models)
-	for(var i=0,k,m,r; k=ids[i]; i++){
+	for(var i=0,k,m,r; (k=ids[i]); i++){
 		m=models[k]
 		r=new Row
 		r.start({},m)
@@ -28,15 +28,19 @@ List.prototype={
 		this.coll=params.collection||this.coll
 		this.Row=params.Row||this.Row
 
-		this.coll.callback.on('update',function(){console.log('Coll.update',arguments)},this)
-		this.coll.models[1].callback.on('field.update',function(){console.log('Model.update',arguments)},this)
+		this.coll.callback.on('update',function(){
+			console.log('Coll.update',arguments)
+		},this)
+		this.coll.models[1].callback.on('field.update',function(){
+			console.log('Model.update',arguments)
+		},this)
 
 		this.rows=populate(this.el.getElementsByTagName('ul')[0],this.coll.models,this.Row)
 	},
 	stop:function(){
 		this.coll.models[1].callback.off(null,null,this)
 		this.coll.callback.off(null,null,this)
-		for(var i=0,rs=this.rows,r; r=rs[i]; i++){
+		for(var i=0,rs=this.rows,r; (r=rs[i]); i++){
 			r.stop()
 		}
 		this.rows.length=0

@@ -3,7 +3,9 @@ pico.run({
 	ajax:__.ajax,
 	onLoad: __.onload,
 	preprocessors:{
-		'.asp':function(url,asp){ return pico.export('pico/str').template(asp) }
+		'.asp':function(url,asp){
+			return pico.export('pico/str').template(asp)
+		}
 	},
 	paths:{
 		'~': './',
@@ -27,13 +29,13 @@ pico.run({
 	}
 	function pageChanged(evt, state, params){
 		var page=pages[state]||home
-		for(var i=0,p; p=oldPanes[i]; i++){
+		for(var i=0,p; (p=oldPanes[i]); i++){
 			p.stop()
 		}
 		requireAll(page.panes,0,[],function(err, panes){
 			if (err) return console.error(err)
 			oldPanes=panes
-			for(var i=0,p; p=panes[i]; i++){
+			for(var i=0,p; (p=panes[i]); i++){
 				p.start({el:'#pane'+i},params)
 			}
 		})
