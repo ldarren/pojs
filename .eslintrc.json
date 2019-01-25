@@ -45,14 +45,6 @@
 				"allow": ["error", "warn"]
 			}
 		],
-		"no-unused-vars": [
-			"error",
-			{
-				"vars": "all",
-				"args": "after-used",
-				"ignoreRestSiblings": true
-			}
-		],
 		"no-trailing-spaces": [
 			"error",
 			{
@@ -64,6 +56,8 @@
 		"no-unused-vars": [
 			"error", {
 			"args": "none",
+			"vars": "all",
+			"ignoreRestSiblings": true,
 			"varsIgnorePattern": "_"
 		}],
 		"no-cond-assign": ["error", "except-parens"],
