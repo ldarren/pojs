@@ -2,7 +2,7 @@ header{
 	display:flex;
 	flex-direction:row;
 	justify-content:space-between;
-	align-items:center;
+	/*align-items:center; causing background color not fill up*/
 	height:5rem;
 	background:#6534ff;
 	user-select:none;
