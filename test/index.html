@@ -110,7 +110,7 @@ pico.run({
 			})
 		})
 
-		test('ensure Module callack works both direction', function(cb){
+		test('ensure Module callback works both direction', function(cb){
 			const result = [1, 2, 3, 4]
 			function func(evt, val){
 				result.splice(result.indexOf(val), 1)
