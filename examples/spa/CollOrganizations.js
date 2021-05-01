@@ -1,5 +1,5 @@
 var organizations={
-	init:function(){
+	init:function(name, opt){
 		this.load([{
 			id:1,
 			name:'AAA',

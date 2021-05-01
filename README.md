@@ -16,7 +16,7 @@ Bind a callback function to an object. The callback will be invoked whenever the
 Remove a previously-bound callback function from an object. If no context is specified, all of the versions of the callback with different contexts will be removed. If no callback is specified, all callbacks for the event will be removed. If no event is specified, callbacks for all events will be removed.
 
 ## trigger
-> Callback.trigger(event, [*args])
+> Callback.trigger(event, [\*args])
 
 Trigger callbacks for the given event. Subsequent arguments to trigger will be passed along to the event callbacks.
 
@@ -27,21 +27,12 @@ purpose of collection
 3) communication channel between modules
 
 ### initialiazation
-> new Collection([seed], [routes], [name], [options])
+> new Collection([seed], [name], [options])
 
 Collections are ordered sets of models.
 
 #### seed (array of object)
 inital data to populate collection
-
-#### routes 
-all routes supported absolute url and relative url. url in rest format is supported too, final url will be build on the fly when parameters are supplied
-
-- `create`: a `POST` url to create a model on upstream
-- `read`: a `GET` url to get a model from upstream
-- `update`: a `PUT` url to update a model on upstream
-- `delete`: a `DELETE` url to remove a model on upstream
-- `list`: a `GET` url to get an array of models from upstream
 
 #### name (string)
 prefix of localstorage key, if absent collection wont be saved to localstorage
@@ -52,7 +43,7 @@ define `options.ajax` to override the default `ajax` network request function us
 define `options.cache` to override the default localstorage cache function
 
 #### extending collection
-Collection constructor only process the first two arguments (`seed`, `routes`), addtional arguments are processed by `Collection.init` function.
+Collection constructor only process the first one arguments (`seed`), addtional arguments are processed by `Collection.init` function.
 
 the default init function
 ```javascript
