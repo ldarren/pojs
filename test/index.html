@@ -27,126 +27,120 @@ pico.run({
 		po: '../lib/'
 	}
 },function(){
-	const {test} = require('pico/test')
+	const {parallel} = require('pico/test')
 	const Collection = require('po/Collection')
 	const Module = require('po/Module')
 
 	return function(){
-		const planets = [
-			{name:'Mercury', days: 88, moons: 0, dist: 36, dia: 0.383, day: 400, night: -170, remarks: '<p>UNSAFE</p>'},
-			{name:'Venus', days: 224, moons: 0, dist: 67.2, dia: 0.949, day: 460, night: 460},
-			{name:'Earth', days: 365, moons: 1, dist: 93, dia: 1, day: 20, night: 10},
-			{name:'Mars', days: 687, moons: 2, dist: 141.6, dia: 0.532, day: -5, night: -85},
-			{name:'Jupiter', days: 4332, moons: 63, dist: 483.6, dia: 11.21, day: -121, night: -121},
-			{name:'Saturn', days: 9617, moons: 61, dist: 886.7, dia: 9.45, day:-125, night: -125},
-			{name:'Uranus', days: 30685, moons: 27, dist: 1784, dia: 4.01, day: -193, night: -193},
-			{name:'Neptune', days: 60155, moons: 1, dist: 2794, dia: 3.88, day: -193, night: -153},
-		]
-		const coll = new Collection(planets, null, null, { idAttr: 'name' })
+		parallel('# POJS Unit Tests', function(){
+			this.series('## Collection', function(){
+				this.begin(next => {
+					const planets = [
+						{name:'Mercury', days: 88, moons: 0, dist: 36, dia: 0.383, day: 400, night: -170, remarks: '<p>UNSAFE</p>'},
+						{name:'Venus', days: 224, moons: 0, dist: 67.2, dia: 0.949, day: 460, night: 460},
+						{name:'Earth', days: 365, moons: 1, dist: 93, dia: 1, day: 20, night: 10},
+						{name:'Mars', days: 687, moons: 2, dist: 141.6, dia: 0.532, day: -5, night: -85},
+						{name:'Jupiter', days: 4332, moons: 63, dist: 483.6, dia: 11.21, day: -121, night: -121},
+						{name:'Saturn', days: 9617, moons: 61, dist: 886.7, dia: 9.45, day:-125, night: -125},
+						{name:'Uranus', days: 30685, moons: 27, dist: 1784, dia: 4.01, day: -193, night: -193},
+						{name:'Neptune', days: 60155, moons: 1, dist: 2794, dia: 3.88, day: -193, night: -153},
+					]
+					const Cacheless = {
+						init(){
+							this.cache = null
+						}
+					}
+					const Solar = Collection.extend(Cacheless)
+					const coll = new Solar(planets, 'Solar System', { idAttr: 'name' })
+					next(null, [planets, coll])
+				})
+				this.test('ensure Collection has loaded correctly', (planets, coll, cb) =>{
+					cb(null, planets.length === coll.length())
+				})
+				this.test('ensure Collection.range works', (planets, coll, cb) => {
+					const name= planets[3].name
+					const [data, remained] = coll.range([name])
+					if (1 !== data.length) return cb('wrong response length')
+					cb(null, data[0].name === name)
+				})
+				this.test('ensure Collection.sort works', (planets, coll, cb) => {
+					coll.sort((a, b) => {
+						return a.dist - b.dist
+					})
+					cb(null, planets[0].name === coll.at(0).name)
+				})
+				this.test('ensure Model.id is set based on idAttr', (planets, coll, cb) => {
+					const name = planets[planets.length -1].name
+					cb(null, coll.get(name).name === coll.at(-1).name)
+				})
+				this.test('ensure Collection.forEach works', (planets, coll, cb) =>{
+					let count = 0
+					coll.forEach((model, index, id, models) => {
+						count++
+						if (model.name !== id || coll !== models || planets[index].dist !== model.dist) return cb(null, false)
+					})
 
-		console.log('# Collection')
-		test('ensure Collection has loaded correctly', function(cb){
-			cb(null, planets.length === coll.length())
-		})
-		test('ensure Collection.list works', function(cb){
-			const name= planets[3].name
-			coll.list([name], (err, data) => {
-				if (err) return cb(err)
-				if (1 !== data.length) return cb('wrong response length')
-				cb(null, data[0].name === name)
-			})
-		})
-		test('ensure Collection.sort works', function(cb){
-			coll.sort((a, b) => {
-				return a.dist - b.dist
-			})
-			cb(null, planets[0].name === coll.at(0).name)
-		})
-		test('ensure Model.id is set based on idAttr', function(cb){
-			const name = planets[planets.length -1].name
-			cb(null, coll.get(name).name === coll.at(-1).name)
-		})
-		test('ensure Collection.forEach works', function(cb){
-			let count = 0
-			coll.forEach((model, index, id, models) => {
-				count++
-				if (model.name !== id || coll !== models || planets[index].dist !== model.dist) return cb(null, false)
-			})
+					cb(null, 8 === count)
+				})
+				this.test('ensure earth is the first liveable planet in solar system', (planets, coll, cb) =>{
+					cb(null, 'Earth' === coll.find(planet => (planet.day < 50 && planet.day > -50 && planet.night < 50 && planet.night > -50)).name)
+				})
+				this.test('ensure count of planets with less than 5 moons is 5', (planets, coll, cb) =>{
+					cb(null, 5 === coll.filter(planet => planet.moons < 5).length)
+				})
+				this.test('ensure collection initial data are escaped', (planets, coll, cb) =>{
+					cb(null, -1 === coll.get('Mercury').remarks.indexOf('<p>'))
+				})
+				this.test('ensure collection new data are escaped', (planets, coll, cb) =>{
+					const venus = coll.get('Venus')
+					venus.remarks = '<p>UNSAFE</p>'
+					cb(null, -1 === venus.remarks.indexOf('<p>'))
+				})
+				this.test('ensure Collection.create works', (planets, coll, cb) =>{
+					const pluto = {name:'Pluto', days: 90520, moons: 5, dist: 0, dia: 2.376, day: 0, night: 0}
+					coll.set(pluto)
+					const data = coll.get(pluto.name)
+					cb(null, data.name === pluto.name)
+				})
+				this.test('ensure Module callback works both direction', (planets, coll, cb) =>{
+					const result = [1, 2, 3, 4]
+					function func(evt, val){
+						result.splice(result.indexOf(val), 1)
+						if (!result.length) cb(null, true)
+					}
+					
+					const Module1 = Module.extend({
+						start(opt, mod2){
+							this.peer = mod2
+							mod2.callback.on('hello', func, this)
+							this.callback.on('world', func, this)
+						},
+						go(){
+							this.peer.callback.trigger('foo', 1)
+							this.callback.trigger('bar', 2)
+						}
+					})
 
-			cb(null, 8 === count)
-		})
-		test('ensure earth is the first liveable planet in solar system', function(cb){
-			cb(null, 'Earth' === coll.find(planet => (planet.day < 50 && planet.day > -50 && planet.night < 50 && planet.night > -50)).name)
-		})
-		test('ensure count of planets with less than 5 moons is 5', function(cb){
-			cb(null, 5 === coll.filter(planet => planet.moons < 5).length)
-		})
-		test('ensure collection initial data are escaped', function(cb){
-			cb(null, -1 === coll.get('Mercury').remarks.indexOf('<p>'))
-		})
-		test('ensure collection new data are escaped', function(cb){
-			const venus = coll.get('Venus')
-			venus.remarks = '<p>UNSAFE</p>'
-			cb(null, -1 === venus.remarks.indexOf('<p>'))
-		})
-		test('ensure Collection.create works', function(cb){
-			coll.create({name:'Pluto', days: 90520, moons: 5, dist: 0, dia: 2.376, day: 0, night: 0}, (err, data) => {
-				if (err) return cb(err)
-				cb(null, data.name === 'Pluto')
-			})
-		})
+					const Module2 = Module.extend({
+						start(opt, mod1){
+							this.peer = mod1
+							mod1.callback.on('bar', func, this)
+							this.callback.on('foo', func, this)
+						},
+						go(){
+							this.peer.callback.trigger('world', 3)
+							this.callback.trigger('hello', 4)
+						}
+					})
 
-		test('ensure Collection.create works with rest url', function(cb){
-			const restColl = new Collection(null, {
-				create: '/anything/:id',
-				read: '/anything/:id',
-				update: '/anything/:id',
-				delete: '/anything/:id',
-				list: '/anything/:id',
-			}, null, { idAttr: 'url', domain: 'https://httpbin.org' })
-			restColl.create({id: 2574}, (err, data) => {
-				if (err) return cb(err)
-				cb(null, 'https://httpbin.org/anything/2574' === data.url)
+					const m1 = new Module1
+					const m2 = new Module2
+					m1.start(null, m2)
+					m2.start(null, m1)
+					m1.go()
+					m2.go()
+				})
 			})
-		})
-
-		test('ensure Module callback works both direction', function(cb){
-			const result = [1, 2, 3, 4]
-			function func(evt, val){
-				result.splice(result.indexOf(val), 1)
-				if (!result.length) cb(null, true)
-			}
-			
-			const Module1 = Module.extend({
-				start(opt, mod2){
-					this.peer = mod2
-					mod2.callback.on('hello', func, this)
-					this.callback.on('world', func, this)
-				},
-				go(){
-					this.peer.callback.trigger('foo', 1)
-					this.callback.trigger('bar', 2)
-				}
-			})
-
-			const Module2 = Module.extend({
-				start(opt, mod1){
-					this.peer = mod1
-					mod1.callback.on('bar', func, this)
-					this.callback.on('foo', func, this)
-				},
-				go(){
-					this.peer.callback.trigger('world', 3)
-					this.callback.trigger('hello', 4)
-				}
-			})
-
-			const m1 = new Module1
-			const m2 = new Module2
-			m1.start(null, m2)
-			m2.start(null, m1)
-			m1.go()
-			m2.go()
 		})
 	}
 })
