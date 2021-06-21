@@ -169,9 +169,7 @@ pico.run({
 					function onchange(evt, key, params, state){
 						if ('change' !== evt) return next('wrong event')
 						const [aK, aId] = order.shift()
-console.log('>>>>>', location.href, aK, key, aId, params.id)
 						if (aK && (aK !== key || aId != params.id)) return next(null, false)
-console.log('>>>>>done', order.length, router.depth())
 						if (!order.length){
 							router.off('change')
 							router.go(currentPath)
@@ -184,7 +182,8 @@ console.log('>>>>>done', order.length, router.depth())
 					router.go('/')
 					router.go('/leave/321', true)
 					router.back()
-					router.forward()
+					// chrome and safari block multiple history api calls with less than 100ms interval
+					setTimeout(() => router.forward(), 100)
 				})
 			})
 		})
