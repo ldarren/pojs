@@ -29,11 +29,12 @@ pico.run({
 },function(){
 	const {parallel} = require('pico/test')
 	const Collection = require('po/Collection')
+	const router = require('po/router')
 	const Module = require('po/Module')
 
 	return function(){
-		parallel('# POJS Unit Tests', function(){
-			this.series('## Collection', function(){
+		parallel('POJS Unit Tests', function(){
+			this.series('Collection', function(){
 				this.begin(next => {
 					const planets = [
 						{name:'Mercury', days: 88, moons: 0, dist: 36, dia: 0.383, day: 400, night: -170, remarks: '<p>UNSAFE</p>'},
@@ -139,6 +140,51 @@ pico.run({
 					m2.start(null, m1)
 					m1.go()
 					m2.go()
+				})
+			})
+			this.series('router', function(){
+				this.begin(next => {
+					const routes = {
+						'/': 'home',
+						'/leave/:id': 'leave',
+						'/forms': 'forms',
+						'/forms/:id': 'form'
+					}
+					next(null, [router, routes])
+				})
+
+				this.test('test router start', (router, routes, next) => {
+					function onchange(evt, key, params, state){
+						router.off('change')
+						if ('change' !== evt) return next('wrong event')
+						next(null, true)
+					}
+
+					router.on('change', onchange).start(routes)
+				})
+
+				this.test('test router go', (router, routes, next) => {
+					const order = [ [], ['form', 123], ['home'], ['leave', 321], ['form', 123], ['leave', 321] ]
+					const currentPath = location.href
+					function onchange(evt, key, params, state){
+						if ('change' !== evt) return next('wrong event')
+						const [aK, aId] = order.shift()
+console.log('>>>>>', location.href, aK, key, aId, params.id)
+						if (aK && (aK !== key || aId != params.id)) return next(null, false)
+console.log('>>>>>done', order.length, router.depth())
+						if (!order.length){
+							router.off('change')
+							router.go(currentPath)
+							next(null, true)
+						}
+					}
+
+					router.on('change', onchange).start(routes)
+					router.go('/forms/123')
+					router.go('/')
+					router.go('/leave/321', true)
+					router.back()
+					router.forward()
 				})
 			})
 		})
