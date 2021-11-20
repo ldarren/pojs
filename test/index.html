@@ -141,6 +141,11 @@ pico.run({
 					m1.go()
 					m2.go()
 				})
+				this.test('ensure cache setting is isolated', (planets, coll, cb) =>{
+					const clone = new Collection(planets, 'Solar Clone', { idAttr: 'name' })
+					clone.cache = function c(){} // should not affect other coll
+					cb(null, null == coll.cache)
+				})
 			})
 			this.series('router', function(){
 				this.begin(next => {
