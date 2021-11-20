@@ -146,6 +146,31 @@ pico.run({
 					clone.cache = function c(){} // should not affect other coll
 					cb(null, null == coll.cache)
 				})
+				this.test('ensure seed doesnt not overriding cache', (planets, coll, cb) =>{
+					const cache = { 'Mock:1': '{"id":1, "text":1}', 'Mock:2': '{"id":2, "text":2}' }
+					const seed = [
+						{ id:1, text:'world'},
+						{ id:2, text:'foo'},
+						{ id:3, text:3}
+					]
+					const cacheFunc = {
+						length(){ return 2 },
+						key(idx){ return Object.keys(cache)[idx] },
+						get(key){ return cache[key] },
+						set(key, val){ cache[key] = val },
+						remove(key){ },
+						clear(name){ },
+					}
+
+					const OverideCache = {
+						init(){
+							this.cache = cacheFunc
+						}
+					}
+					const MockCache = Collection.extend(OverideCache)
+					const mock = new MockCache(seed, 'Mock')
+					cb(null, 1 === mock.get(1).text && 2 === mock.get(2).text && 3 === mock.get(3).text)
+				})
 			})
 			this.series('router', function(){
 				this.begin(next => {
