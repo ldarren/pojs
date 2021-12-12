@@ -7,6 +7,7 @@ pico.run({
 			return pico.export('pico/str').template(asp)
 		}
 	},
+	baseurl: location.href,
 	paths:{
 		'~': './',
 		po: '../../lib/'
