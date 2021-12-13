@@ -199,7 +199,7 @@ pico.run({
 					function onchange(evt, key, params, state){
 						if ('change' !== evt) return next('wrong event')
 						const [aK, aId] = order.shift()
-						if (aK && (aK !== key || aId != params.id)) return next(null, false)
+						if (aK && (aK !== key || aId != router.getParam('id'))) return next(null, false)
 						if (!order.length){
 							router.off('change')
 							router.go(currentPath)
@@ -209,6 +209,7 @@ pico.run({
 
 					router.on('change', onchange).start(routes)
 					router.go('/forms/123')
+					if ('/forms/:id' !== router.getRoute()) return next(null, false)
 					router.go('/')
 					router.go('/leave/321', true)
 					router.back()
@@ -235,6 +236,7 @@ pico.run({
 
 					router.on('change', onchange).start(routes, null, extract)
 					router.go('#/forms/123')
+					if ('/forms/:id' !== router.getRoute()) return next(null, false)
 					router.go('#/')
 					router.go('#/leave/321', true)
 					router.back()
@@ -260,6 +262,7 @@ pico.run({
 					}
 					router.on('change', onchange).start(routes, null, extract)
 					router.go('?q=/forms/123')
+					if ('/forms/:id' !== router.getRoute()) return next(null, false)
 					router.go('?q=/')
 					router.go('?q=/leave/321', true)
 					router.back()
