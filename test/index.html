@@ -215,6 +215,57 @@ pico.run({
 					// chrome and safari block multiple history api calls with less than 100ms interval
 					setTimeout(() => router.forward(), 100)
 				})
+
+				this.test('test router with hash', (router, routes, next) => {
+					const order = [ [], ['form', 123], ['home'], ['leave', 321], ['form', 123], ['leave', 321] ]
+					const currentPath = location.href
+					function onchange(evt, key, params, state){
+						if ('change' !== evt) return next('wrong event')
+						const [aK, aId] = order.shift()
+						if (aK && (aK !== key || aId != params.id)) return next(null, false)
+						if (!order.length){
+							router.off('change')
+							router.go(currentPath)
+							next(null, true)
+						}
+					}
+					function extract(base){
+						return location.hash.substring(1)
+					}
+
+					router.on('change', onchange).start(routes, null, extract)
+					router.go('#/forms/123')
+					router.go('#/')
+					router.go('#/leave/321', true)
+					router.back()
+					// chrome and safari block multiple history api calls with less than 100ms interval
+					setTimeout(() => router.forward(), 100)
+				})
+
+				this.test('test router with query string', (router, routes, next) => {
+					const order = [ [], ['form', 123], ['home'], ['leave', 321], ['form', 123], ['leave', 321] ]
+					const currentPath = location.href
+					function onchange(evt, key, params, state){
+						if ('change' !== evt) return next('wrong event')
+						const [aK, aId] = order.shift()
+						if (aK && (aK !== key || aId != params.id)) return next(null, false)
+						if (!order.length){
+							router.off('change')
+							router.go(currentPath)
+							next(null, true)
+						}
+					}
+					function extract(base){
+						return (new URLSearchParams(location.search)).get('q') || ''
+					}
+					router.on('change', onchange).start(routes, null, extract)
+					router.go('?q=/forms/123')
+					router.go('?q=/')
+					router.go('?q=/leave/321', true)
+					router.back()
+					// chrome and safari block multiple history api calls with less than 100ms interval
+					setTimeout(() => router.forward(), 100)
+				})
 			})
 		})
 	}
