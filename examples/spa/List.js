@@ -29,9 +29,11 @@ List.prototype={
 		this.Row=params.Row||this.Row
 
 		this.coll.callback.on('update',function(){
+			// eslint-disable-next-line
 			console.log('Coll.update',arguments)
 		},this)
 		this.coll.models[1].callback.on('field.update',function(){
+			// eslint-disable-next-line
 			console.log('Model.update',arguments)
 		},this)
 

@@ -32,6 +32,7 @@ return {
 		mod.start(opt)
 
 		coll.forEach(function(ite, index, id, coll){
+			// eslint-disable-next-line
 			console.log(coll.name)
 		})
 

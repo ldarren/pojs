@@ -1,6 +1,6 @@
 var organizations={
 	init:function(name, opt){
-		this.load([{
+		this.set([{
 			id:1,
 			name:'AAA',
 			desc:'the tail of your dump file indicates that you have'
@@ -13,8 +13,9 @@ var organizations={
 			name:'CCC',
 			desc:'When running this on a file that is'
 		}],function(err){
+			// eslint-disable-next-line
 			console.log('load orgs done',err)
-		})
+		}, 1)
 	}
 }
 
