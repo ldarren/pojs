@@ -13,6 +13,7 @@ var organizations={
 			name:'CCC',
 			desc:'When running this on a file that is'
 		}],function(err){
+			// eslint-disable-next-line
 			console.log('load orgs done',err)
 		}, 1)
 	}

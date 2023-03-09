@@ -1,6 +1,6 @@
 {
   "name": "pojs",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "plain old javascript framework",
   "main": "example/main.js",
   "directories": {

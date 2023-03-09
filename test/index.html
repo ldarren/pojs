@@ -175,6 +175,7 @@ pico.run({
 			this.series('router', function(){
 				this.begin(next => {
 					const routes = {
+						'': 'home',
 						'/': 'home',
 						'/leave/:id': 'leave',
 						'/forms': 'forms',
@@ -183,9 +184,10 @@ pico.run({
 					next(null, [router, routes])
 				})
 
-				this.test('test router start', (router, routes, next) => {
+				this.test('test router popstate at start', (router, routes, next) => {
 					function onchange(evt, key, params, state){
 						router.off('change')
+						router.go('')
 						if ('change' !== evt) return next('wrong event')
 						next(null, true)
 					}
@@ -195,14 +197,13 @@ pico.run({
 
 				this.test('test router go', (router, routes, next) => {
 					const order = [ [], ['form', 123], ['home'], ['leave', 321], ['form', 123], ['leave', 321] ]
-					const currentPath = location.href
 					function onchange(evt, key, params, state){
 						if ('change' !== evt) return next('wrong event')
 						const [aK, aId] = order.shift()
 						if (aK && (aK !== key || aId != router.getParam('id'))) return next(null, false)
 						if (!order.length){
 							router.off('change')
-							router.go(currentPath)
+							router.go('')
 							next(null, true)
 						}
 					}
@@ -217,7 +218,7 @@ pico.run({
 					setTimeout(() => router.forward(), 100)
 				})
 
-				this.test('test router with hash', (router, routes, next) => {
+				this.test('test router with path', (router, routes, next) => {
 					const order = [ [], ['form', 123], ['home'], ['leave', 321], ['form', 123], ['leave', 321] ]
 					const currentPath = location.href
 					function onchange(evt, key, params, state){
@@ -226,19 +227,22 @@ pico.run({
 						if (aK && (aK !== key || aId != params.id)) return next(null, false)
 						if (!order.length){
 							router.off('change')
-							router.go(currentPath)
+							router.go('')
 							next(null, true)
 						}
 					}
-					function extract(base){
-						return location.hash.substring(1)
+					function embed(path){
+						return currentPath + path
+					}
+					function extract(){
+						return location.href.substring(currentPath.length)
 					}
 
-					router.on('change', onchange).start(routes, null, extract)
-					router.go('#/forms/123')
+					router.on('change', onchange).start(routes, embed, extract)
+					router.go('/forms/123')
 					if ('/forms/:id' !== router.getRoute()) return next(null, false)
-					router.go('#/')
-					router.go('#/leave/321', true)
+					router.go('/')
+					router.go('/leave/321', true)
 					router.back()
 					// chrome and safari block multiple history api calls with less than 100ms interval
 					setTimeout(() => router.forward(), 100)
@@ -246,29 +250,35 @@ pico.run({
 
 				this.test('test router with query string', (router, routes, next) => {
 					const order = [ [], ['form', 123], ['home'], ['leave', 321], ['form', 123], ['leave', 321] ]
-					const currentPath = location.href
 					function onchange(evt, key, params, state){
 						if ('change' !== evt) return next('wrong event')
 						const [aK, aId] = order.shift()
 						if (aK && (aK !== key || aId != params.id)) return next(null, false)
 						if (!order.length){
 							router.off('change')
-							router.go(currentPath)
+							router.go('')
 							next(null, true)
 						}
+					}
+					function embed(path){
+						var params = new URLSearchParams(location.search)
+						params.set('q', path)
+						console.log('#######', location.search, params.toString())
+						return '?' + params.toString()
 					}
 					function extract(base){
 						return (new URLSearchParams(location.search)).get('q') || ''
 					}
-					router.on('change', onchange).start(routes, null, extract)
-					router.go('?q=/forms/123')
+					router.on('change', onchange).start(routes, embed, extract)
+					router.go('/forms/123')
 					if ('/forms/:id' !== router.getRoute()) return next(null, false)
-					router.go('?q=/')
-					router.go('?q=/leave/321', true)
+					router.go('/')
+					router.go('/leave/321', true)
 					router.back()
 					// chrome and safari block multiple history api calls with less than 100ms interval
 					setTimeout(() => router.forward(), 100)
 				})
+
 			})
 		})
 	}
